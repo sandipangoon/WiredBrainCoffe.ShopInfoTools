@@ -25,5 +25,22 @@ namespace BrainCoeffe.ShopInfoTool.Controllers
 
             return Ok(coffeeShopList);
         }
+
+        [HttpGet("{loc}")]
+        public IActionResult GetCoffeeShopsWithName(string loc)
+        {
+            var coffeeShopProvider = new CoffeeShopDataProvider();
+            var coffeeShopList = coffeeShopProvider.LoadCoffeeShops();
+
+            var foundCoffeeShops = coffeeShopList
+                .Where(x => x.Location.StartsWith(loc, StringComparison.OrdinalIgnoreCase));
+
+            if (!foundCoffeeShops.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(foundCoffeeShops);
+        }
     }
 }
